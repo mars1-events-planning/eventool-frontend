@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  frontend:
+    image: cr.eventool.online/eventool-frontend:0.0.2
+      - proxy
+    deploy:
+      mode: replicated
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+      replicas: 1
+      labels:
+        - 'traefik.enable=true'
+        - 'traefik.http.services.frontend.loadbalancer.server.port=3000'
+        - 'traefik.http.routers.frontend.rule=Host(`eventool.online`)'
+        - 'traefik.http.routers.frontend.tls.certresolver=myresolver'
+
+networks:
+  proxy:
+    external: true
