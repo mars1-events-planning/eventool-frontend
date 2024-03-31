@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   frontend:
-    image: cr.eventool.online/eventool-frontend:0.0.2
+    image: cr.eventool.online/eventool-frontend:$IMAGE_TAG
       - proxy
     deploy:
       mode: replicated

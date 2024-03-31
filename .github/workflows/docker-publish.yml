@@ -55,7 +55,7 @@ jobs:
       - name: Replace image tag in stack file
         run: |
           export IMAGE_TAG=${{ env.VERSION }}
-          envsubst < path/to/your/stack-file.template.yml > path/to/your/stack-file.yml
+          envsubst < docker/eventool-frontend.yml > docker/eventool-frontend.generated.yml
 
       - name: Update Docker Swarm Stack
         uses: appleboy/ssh-action@master
