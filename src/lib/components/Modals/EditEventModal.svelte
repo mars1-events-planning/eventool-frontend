@@ -68,18 +68,18 @@
 		<slot />
 	</div>
 
-	<form slot="content" class="grid grid-cols-5 gap-2">
+	<form slot="content" class="grid grid-cols-5 gap-2 w-full">
 		<LabeledInput
 			id="title"
 			name="title"
 			bind:value={title}
 			label="Название"
 			type="text"
-			labelClass="w-min"
-			inputClass="w-full bg-primary/15 col-span-4"
+			labelClass="w-min max-sm:col-span-5"
+			inputClass="w-full bg-primary/15 col-span-4 max-sm:col-span-5"
 		/>
-		<div></div>
-		<div class="col-span-4">
+		<div class="max-sm:hidden"></div>
+		<div class="col-span-4 max-sm:col-span-5">
 			<ValidationErrorsList errors={validationErrors?.filter((x) => x.propertyName === 'Title')} />
 		</div>
 		<LabeledTextArea
@@ -87,11 +87,11 @@
 			name="description"
 			bind:value={description}
 			label="Описание"
-			labelClass="w-min"
-			inputClass="w-full bg-primary/15 col-span-4"
+			labelClass="w-min max-sm:col-span-5"
+			inputClass="w-full bg-primary/15 col-span-4 max-sm:col-span-5 min-h-[100px]"
 		/>
-		<div></div>
-		<div class="col-span-4">
+		<div class="max-sm:hidden"></div>
+		<div class="col-span-4 max-sm:col-span-5">
 			<ValidationErrorsList
 				errors={validationErrors?.filter((x) => x.propertyName === 'Description')}
 			/>
@@ -102,11 +102,11 @@
 			bind:value={address}
 			label="Адрес"
 			type="text"
-			labelClass="w-min"
-			inputClass="w-full bg-primary/15 col-span-4"
+			labelClass="w-min max-sm:col-span-5"
+			inputClass="w-full bg-primary/15 col-span-4 max-sm:col-span-5"
 		/>
-		<div></div>
-		<div class="col-span-4">
+		<div class="max-sm:hidden"></div>
+		<div class="col-span-4 max-sm:col-span-5">
 			<ValidationErrorsList
 				errors={validationErrors?.filter((x) => x.propertyName === 'Address')}
 			/>
@@ -117,8 +117,8 @@
 			bind:value={startAtTime}
 			label="Время начала"
 			type="time"
-			labelClass="w-min"
-			inputClass="w-full bg-primary/15 col-span-4"
+			labelClass="w-min max-sm:col-span-5"
+			inputClass="w-full bg-primary/15 col-span-4 max-sm:col-span-5"
 		/>
 		<LabeledInput
 			id="startAtDate"
@@ -126,11 +126,11 @@
 			bind:value={startAtDate}
 			label="Дата начала"
 			type="date"
-			labelClass="w-min"
-			inputClass="w-full bg-primary/15 col-span-4"
+			labelClass="w-min max-sm:col-span-5"
+			inputClass="w-full bg-primary/15 col-span-4 max-sm:col-span-5"
 		/>
-		<div></div>
-		<div class="col-span-4">
+		<div class="max-sm:hidden"></div>
+		<div class="col-span-4 max-sm:col-span-5">
 			<ValidationErrorsList
 				errors={validationErrors?.filter((x) => x.propertyName === 'StartDateTimeUtc')}
 			/>

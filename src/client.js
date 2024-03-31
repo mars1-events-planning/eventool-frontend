@@ -1,7 +1,7 @@
 import { HoudiniClient } from '$houdini';
 
 export default new HoudiniClient({
-    url: 'https://backend.eventool.online/graphql',
+    url: "http://localhost:5275/graphql",
     fetchParams({ session }) {
         return {
             headers: {

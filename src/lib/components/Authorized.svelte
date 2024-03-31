@@ -20,7 +20,7 @@
 		}
 
 		authorized = false;
-		await goto('/error');
+		await goto('/error?code=401');
 	};
 </script>
 

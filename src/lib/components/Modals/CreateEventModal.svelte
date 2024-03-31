@@ -30,7 +30,7 @@
 		<slot />
 	</div>
 
-	<form slot="content" class="grid grid-cols-5 gap-2">
+	<form slot="content" class="grid grid-cols-5 gap-2 items-center">
 		<LabeledInput
 			id="title"
 			name="title"
@@ -38,11 +38,11 @@
 			label="Название"
 			type="text"
 			labelClass="w-min col-span-5"
-			inputClass="w-full bg-primary/15 col-span-4"
+			inputClass="w-full bg-primary/15 col-span-4 max-[330px]:col-span-5 max-[320px]:input-sm"
 		/>
 		<button
 			type="button"
-			class="btn btn-primary w-full"
+			class="btn btn-primary w-full max-[330px]:col-span-5 max-[320px]:btn-sm"
 			disabled={title.trim().length === 0}
 			onclick={async () => {
 				let result = await store.mutate({

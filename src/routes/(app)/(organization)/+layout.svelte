@@ -6,23 +6,22 @@
 	import Footer from '$lib/components/Footer.svelte';
 </script>
 
-<div class="drawer lg:drawer-open">
+<div class="drawer md:drawer-open ">
 	<input id="navbar-drawer" type="checkbox" class="drawer-toggle" />
 	<div class="drawer-content flex flex-col pt-5 px-2 h-full">
-
-		<slot />
-		<div class="lg:hidden fixed inset-x-[50%] bottom-5">
-			<label for="navbar-drawer" class="btn btn-circle btn-lg btn-primary drawer-button">
+		<div class="flex flex-col w-full items-center fixed bottom-5 z-0 drawer-button pointer-events-none">
+			<label for="navbar-drawer" class="btn btn-circle btn-lg btn-primary pointer-events-auto">
 				<SmallLogo size={30} />
 			</label>
 		</div>
+		<slot />
 	</div>
-	<div class="drawer-side">
+	<div class="drawer-side ">
 		<label for="navbar-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
 
-		<div class="drawer-menu flex flex-col shadow-lg min-h-[95%] my-5 mx-5 rounded-2xl border pt-5 z-10">
+		<div class="drawer-menu flex flex-col shadow-lg min-h-[95%] my-5 mx-5 rounded-2xl border pt-5 z-10 ">
 			<label for="navbar-drawer" aria-label="close sidebar" class="drawer-close btn btn-ghost btn-circle absolute top-1 btn-sm right-1 text-xl font-bold">x</label>
-			<ul class="menu p-4 w-80 text-base-content text-lg overflow-y-hidden overflow-x-hidden ">
+			<ul class="menu p-4 w-80 max-sm:w-60 text-base-content text-lg overflow-y-hidden overflow-x-hidden ">
 				<li>
 					<a href="/list">
 						<div class="pb-1">
@@ -55,13 +54,17 @@
 
 <style lang="postcss">
 	/* Adjust the drawer side to move it more to the left */
-	@media (min-width: 1024px) {
+	@media (min-width: 768px) {
 		.drawer-close {
+			display: none;
+		}
+
+		.drawer-button {
 			display: none;
 		}
 	}
 
-	@media (max-width: 1024px) {
+	@media (max-width: 767px) {
 		.drawer-toggle:not(:checked) ~ .drawer-side {
 			transform: translateX(-20%);
 		}
@@ -73,9 +76,7 @@
 		.drawer-toggle:checked ~ .drawer-side > .drawer-overlay {
 			@apply bg-transparent;
 		}
-	}
 
-	@media (max-width: 768px) {
 		.drawer-toggle:checked ~ .drawer-content .drawer-button {
 			display: none;
 		}

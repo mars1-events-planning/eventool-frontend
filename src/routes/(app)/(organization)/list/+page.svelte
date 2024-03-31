@@ -40,61 +40,68 @@
 
 <Authorized>
 	<div class="flex flex-col gap-2 max-lg:items-center overflow-x-auto">
-		<div class="flex flex-row justify-between w-full items-center">
-			<h1 class="font-semibold text-xl">Список событий</h1>
+		<div class="flex flex-row w-full items-center gap-5 max-md:flex-row-reverse max-md:justify-between">
 			<CreateEventModal>
 				<div class="btn btn-primary btn-sm">
 					<Create size={20} />
 				</div>
 			</CreateEventModal>
+			<h1 class="font-semibold text-xl">Список событий</h1>
 		</div>
 
-		<div class="flex flex-wrap max-lg:justify-center gap-5">
-			{#each events as e}
-				{@const createdAt = formatDateString(e.createdAtUtc)}
-				{@const changedAt = formatDateString(e.changedAtUtc)}
+		{#if events.length > 0}
+			<div class="flex flex-wrap max-lg:justify-center gap-5">
+				{#each events as e}
+					{@const createdAt = formatDateString(e.createdAtUtc)}
+					{@const changedAt = formatDateString(e.changedAtUtc)}
 
-				<div
-					class="flex flex-col border border-base-300 rounded-md p-4 max-w-[300px] min-w-[300px]"
-				>
-					<a href={`/event/${e.id}/edit`}>
-						<div
-							class="flex flex-row space-x-2 items-center font-semibold"
-						>
-							<div
-								class="avatar placeholder text-neutral-content"
-							>
-								<div class="bg-primary w-10 rounded-full">
-									<img
-										src="https://wishpics.ru/site-images/wishpics_ru_3145.jpg"
-										alt={e.title.slice(0, 2)}
-									/>
-								</div>
-							</div>
-							<div class="flex flex-col gap-1">
-								<span class=" font-semibold">{e.title}</span>
-								<div class="badge badge-ghost badge-sm">
-									Создано: <span
-										class="font-mono font-thin pl-1"
-									>
-										{createdAt}</span
-									>
-								</div>
-							</div>
-						</div>
-					</a>
-					<br />
-					<button
-						class="btn btn-outline btn-error btn-sm"
-						onclick={() => {
-							console.log(`mock delete ${e.id}`);
-						}}
+					<div
+						class="flex flex-col border border-base-300 rounded-md p-4 max-w-[300px] min-w-[300px]"
 					>
-						<Trash size={20} />
-					</button>
-				</div>
-			{/each}
-		</div>
+						<a href={`/event/${e.id}/edit`}>
+							<div
+								class="flex flex-row space-x-2 items-center font-semibold"
+							>
+								<div
+									class="avatar placeholder text-neutral-content"
+								>
+									<div class="bg-primary w-10 rounded-full">
+										<img
+											src="https://wishpics.ru/site-images/wishpics_ru_3145.jpg"
+											alt={e.title.slice(0, 2)}
+										/>
+									</div>
+								</div>
+								<div class="flex flex-col gap-1">
+									<span class=" font-semibold">{e.title}</span
+									>
+									<div class="badge badge-ghost badge-sm">
+										Создано: <span
+											class="font-mono font-thin pl-1"
+										>
+											{createdAt}</span
+										>
+									</div>
+								</div>
+							</div>
+						</a>
+						<br />
+						<button
+							class="btn btn-outline btn-error btn-sm"
+							onclick={() => {
+								console.log(`mock delete ${e.id}`);
+							}}
+						>
+							<Trash size={20} />
+						</button>
+					</div>
+				{/each}
+			</div>
+		{:else}
+			<div class="flex flex-col items-center text-xl">
+				События пока не добавлены
+			</div>
+		{/if}
 		<div class="join w-full justify-center">
 			<button
 				class="join-item btn btn-ghost"

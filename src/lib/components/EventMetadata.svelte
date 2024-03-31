@@ -35,18 +35,18 @@
 		</div>
 		<div class="collapse-content flex flex-col gap-4">
 			<div class="grid grid-cols-8 font-sm gap-2">
-				<span class="col-span-2">Aдрес:</span>
-				<span class="col-span-6 font-thin">{renderValue(event.address)}</span>
+				<span class="col-span-2 max-sm:col-span-8">Aдрес:</span>
+				<span class="col-span-6 font-thin max-sm:col-span-8">{renderValue(event.address)}</span>
 
-				<span class="col-span-2">Время начала:</span>
-				<span class="col-span-6 font-thin"
+				<span class="col-span-2 max-sm:col-span-8">Время начала:</span>
+				<span class="col-span-6 font-thin max-sm:col-span-8"
 					>{event.startAtUtc ? formatDateString(event.startAtUtc) : 'Значение не задано'}</span
 				>
 
-				<span class="col-span-2">Описание:</span>
-				<span class="col-span-6 font-thin">{event.description}</span>
+				<span class="col-span-2 max-sm:col-span-8">Описание:</span>
+				<span class="col-span-6 font-thin max-sm:col-span-8">{event.description}</span>
 			</div>
-			<div class="flex flex-col w-full items-start">
+			<div class="flex flex-col w-full items-start max-sm:items-center">
 				<EditEventModal bind:event={event}>
 					<button class="btn btn-neutral btn-outline btn-xs"
 						><Edit size={20} /> Редактировать</button
