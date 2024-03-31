@@ -6,7 +6,7 @@
 	import Footer from '$lib/components/Footer.svelte';
 </script>
 
-<div class="drawer md:drawer-open ">
+<div class="drawer md:drawer-open">
 	<input id="navbar-drawer" type="checkbox" class="drawer-toggle" />
 	<div class="drawer-content flex flex-col pt-5 px-2 h-full">
 		<div class="flex flex-col w-full items-center fixed bottom-5 z-0 drawer-button pointer-events-none">
@@ -17,9 +17,9 @@
 		<slot />
 	</div>
 	<div class="drawer-side ">
-		<label for="navbar-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+		<label for="navbar-drawer" aria-label="close sidebar" class="drawer-overlay "></label>
 
-		<div class="drawer-menu flex flex-col shadow-lg min-h-[95%] my-5 mx-5 rounded-2xl border pt-5 z-10 ">
+		<div class="drawer-menu flex flex-col shadow-lg min-h-[95%] my-5 mx-5 rounded-2xl border pt-5 z-10 pointer-events-auto ">
 			<label for="navbar-drawer" aria-label="close sidebar" class="drawer-close btn btn-ghost btn-circle absolute top-1 btn-sm right-1 text-xl font-bold">x</label>
 			<ul class="menu p-4 w-80 max-sm:w-60 text-base-content text-lg overflow-y-hidden overflow-x-hidden ">
 				<li>
@@ -80,5 +80,9 @@
 		.drawer-toggle:checked ~ .drawer-content .drawer-button {
 			display: none;
 		}
+	}
+
+	.drawer:has(.drawer-toggle:checked) {
+		pointer-events: none;
 	}
 </style>

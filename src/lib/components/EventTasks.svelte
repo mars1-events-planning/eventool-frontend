@@ -1,15 +1,15 @@
 <script lang="ts">
-	import Checklist from '$lib/components/controls/Checklist/Checklist.svelte';
-	import RoundProgress from '$lib/components/RoundProgress.svelte';
-	import EditChecklistModal from './Modals/EditChecklistModal.svelte';
-	import type { EventModel } from './controls/eventsModel';
+	import Checklist from "$lib/components/controls/Checklist/Checklist.svelte";
+	import RoundProgress from "$lib/components/RoundProgress.svelte";
+	import EditChecklistModal from "./Modals/EditChecklistModal.svelte";
+	import type { EventModel } from "./controls/eventsModel";
 
 	let { event } = $props<{ event: EventModel }>();
 
 	let progress = $derived(
 		(event.checklists.flatMap((c) => c.items).filter((c) => c.done).length /
 			event.checklists.flatMap((c) => c.items).length) *
-			100
+			100,
 	);
 </script>
 
@@ -24,19 +24,24 @@
 		</div>
 
 		<div class="collapse-content flex flex-col gap-4">
-			
-				<div class="flex flex-col w-full items-center">
-					<EditChecklistModal eventId={event.id}>
-					<button type="button" class="btn btn-primary btn-outline text-xs font-bold btn-sm">
+			<div class="flex flex-col w-full items-center">
+				<EditChecklistModal eventId={event.id}>
+					<button
+						type="button"
+						class="btn btn-primary btn-outline text-xs font-bold btn-sm"
+					>
 						<span class="text-xl">+</span>
 						<span>Добавить список задач</span>
 					</button>
 				</EditChecklistModal>
-				</div>
+			</div>
 
 			<div class="flex flex-wrap gap-5 justify-normal">
 				{#each event.checklists as _, i}
-					<Checklist checklist={event.checklists[i]} eventId={event.id} />
+					<Checklist
+						checklist={event.checklists[i]}
+						eventId={event.id}
+					/>
 				{/each}
 				<div class="flex flex-col w-full items-center"></div>
 			</div>

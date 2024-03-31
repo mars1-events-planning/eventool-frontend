@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { graphql } from '$houdini';
-	import LabeledInput from '../controls/LabeledInput.svelte';
-	import ValidationErrorsList from '../controls/ValidationErrorsList.svelte';
-	import Modal from './Modal.svelte';
+	import { graphql } from "$houdini";
+	import LabeledInput from "../controls/LabeledInput.svelte";
+	import ValidationErrorsList from "../controls/ValidationErrorsList.svelte";
+	import Modal from "./Modal.svelte";
 
 	let changePasswordStore = graphql(`
 		mutation ChangePassword($input: ChangePasswordInput!) {
@@ -16,44 +16,48 @@
 					... on Error {
 						message
 					}
-                    ... on ValidationError {
-                        errors {
-                            propertyName
-                            errorMessage
-                        }
-                    }
+					... on ValidationError {
+						errors {
+							propertyName
+							errorMessage
+						}
+					}
 				}
 			}
 		}
 	`);
 
-	let oldPassword = $state('');
-	let newPassword = $state('');
+	let oldPassword = $state("");
+	let newPassword = $state("");
 
 	let validationErrors = $derived(
 		$changePasswordStore.data?.changePassword?.errors
-			?.filter((error) => error.__typename == 'ValidationError' && 'errors' in error)
-            .map((error) => error )
-            .flatMap((error) => {
-                if ('errors' in error) {
-                    return error.errors?.map((error) => error!)!;
-                }
-                return [];
-            })
-			?? []
+			?.filter(
+				(error) =>
+					error.__typename == "ValidationError" && "errors" in error,
+			)
+			.map((error) => error)
+			.flatMap((error) => {
+				if ("errors" in error) {
+					return error.errors?.map((error) => error!)!;
+				}
+				return [];
+			}) ?? [],
 	);
 
 	let wrongPasswordErrors = $derived(
 		$changePasswordStore.data?.changePassword?.errors
-			?.filter((error) => error.__typename == 'WrongPasswordError')
-			.map((error) => error.message) ?? []
+			?.filter((error) => error.__typename == "WrongPasswordError")
+			.map((error) => error.message) ?? [],
 	);
 
 	let mutationSuccess = $state(false);
 </script>
 
 <Modal title="Смена пароля">
-	<div slot="button">Сменить пароль</div>
+	<div slot="button">
+		<slot />
+	</div>
 
 	<form class="flex flex-col w-full" slot="content">
 		<LabeledInput
@@ -66,9 +70,9 @@
 			inputClass="w-full bg-primary/15"
 		/>
 		{#if wrongPasswordErrors.length > 0}
-            {#each wrongPasswordErrors as error}
-                <div class="text-error self-center">{error}</div>
-            {/each}
+			{#each wrongPasswordErrors as error}
+				<div class="text-error self-center">{error}</div>
+			{/each}
 		{/if}
 
 		<LabeledInput
@@ -81,7 +85,7 @@
 			inputClass="w-full bg-primary/15"
 		/>
 		{#if validationErrors.length > 0}
-            <ValidationErrorsList errors={validationErrors} />
+			<ValidationErrorsList errors={validationErrors} />
 		{/if}
 
 		<button
@@ -91,8 +95,8 @@
 				let result = await changePasswordStore.mutate({
 					input: {
 						oldPassword: oldPassword,
-						newPassword: newPassword
-					}
+						newPassword: newPassword,
+					},
 				});
 
 				if (result.data?.changePassword?.organizer) {
@@ -107,7 +111,9 @@
 		</button>
 		{#if mutationSuccess}
 			<div class="flex flex-col items-center justify-center w-full">
-				<div class=" text-primary self-center">Пароль успешно изменен</div>
+				<div class=" text-primary self-center">
+					Пароль успешно изменен
+				</div>
 			</div>
 		{/if}
 	</form>

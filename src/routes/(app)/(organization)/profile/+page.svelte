@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { graphql } from '$houdini';
-	import AvatarPlaceholder from '$lib/components/AvatarPlaceholder.svelte';
-	import ChangePassword from '$lib/components/Modals/ChangePassword.svelte';
-	import SuccessPopup from '$lib/components/SuccessPopup.svelte';
-	import LabeledInput from '$lib/components/controls/LabeledInput.svelte';
-	import ValidationErrorsList from '$lib/components/controls/ValidationErrorsList.svelte';
+	import { graphql } from "$houdini";
+	import AvatarPlaceholder from "$lib/components/AvatarPlaceholder.svelte";
+	import ChangePassword from "$lib/components/Modals/ChangePassword.svelte";
+	import SuccessPopup from "$lib/components/SuccessPopup.svelte";
+	import LabeledInput from "$lib/components/controls/LabeledInput.svelte";
+	import ValidationErrorsList from "$lib/components/controls/ValidationErrorsList.svelte";
 
 	const currentOrganizerDataStore = graphql(`
 		query GetCurrentOrganizerData {
@@ -40,21 +40,21 @@
 		}
 	`);
 
-	let initialFullname = $state('');
-	let initialUsername = $state('');
-	let fullname = $state('');
-	let username = $state('');
+	let initialFullname = $state("");
+	let initialUsername = $state("");
+	let fullname = $state("");
+	let username = $state("");
 	let validationErrors = $derived(
 		$editStore.data?.editOrganizer?.errors
-			?.filter((error) => error.code === 'ValidationError')
+			?.filter((error) => error.code === "ValidationError")
 			?.flatMap((error) => error.errors)
-			?.map((error) => error!) ?? []
+			?.map((error) => error!) ?? [],
 	);
 
 	$effect.pre(() => {
 		currentOrganizerDataStore.fetch().then((data) => {
-			initialFullname = data.data?.organizer?.fullname ?? '';
-			initialUsername = data.data?.organizer?.username ?? '';
+			initialFullname = data.data?.organizer?.fullname ?? "";
+			initialUsername = data.data?.organizer?.username ?? "";
 			fullname = initialFullname;
 			username = initialUsername;
 		});
@@ -65,10 +65,30 @@
 
 <div class="flex flex-col gap-2 max-lg:items-center">
 	<h1 class="font-semibold text-xl">Профиль</h1>
-	<form
-		class="flex min-lg:flex-row min-lg:justify-between max-lg:items-center max-lg:flex-col-reverse max-lg:gap-4"
-	>
-		<div class="grid grid-cols-5 gap-4">
+	<form class="flex max-lg:items-center flex-col gap-4">
+		<div class="flex flex-col gap-2">
+			<AvatarPlaceholder
+				avatarClasses="rounded-lg p-2 aspect-square max-w-48 max-h-48 w-full"
+			>
+				<span class="text-4xl"
+					>{initialFullname.slice(0, 2).toUpperCase()}</span
+				>
+			</AvatarPlaceholder>
+			<button class="btn btn-neutral btn-outline btn-sm max-w-48 w-full"
+				>Сменить фото</button
+			>
+		</div>
+		<div class="col-span-5">
+			<ChangePassword>
+				<div
+					class="btn btn-ghost btn-outline text-xs font-bold btn-sm w-full"
+				>
+					<span>Сменить пароль</span>
+				</div>
+			</ChangePassword>
+		</div>
+		<div class="grid grid-cols-5 gap-4 w-fit">
+			
 			<div class="grid grid-cols-subgrid col-span-5 items-center">
 				<LabeledInput
 					id="username"
@@ -82,7 +102,9 @@
 				<div></div>
 				<div class="col-span-4 break-all">
 					<ValidationErrorsList
-						errors={validationErrors?.filter((x) => x.propertyName === 'Username')}
+						errors={validationErrors?.filter(
+							(x) => x.propertyName === "Username",
+						)}
 					/>
 				</div>
 			</div>
@@ -100,12 +122,12 @@
 				<div></div>
 				<div class="col-span-4">
 					<ValidationErrorsList
-						errors={validationErrors?.filter((x) => x.propertyName === 'Fullname')}
+						errors={validationErrors?.filter(
+							(x) => x.propertyName === "Fullname",
+						)}
 					/>
 				</div>
 			</div>
-
-			<ChangePassword />
 
 			<button
 				type="button"
@@ -113,9 +135,15 @@
 				onclick={async () => {
 					let result = await editStore.mutate({
 						input: {
-							fullName: fullname === initialFullname ? undefined : fullname,
-							username: username === initialUsername ? undefined : username
-						}
+							fullName:
+								fullname === initialFullname
+									? undefined
+									: fullname,
+							username:
+								username === initialUsername
+									? undefined
+									: username,
+						},
 					});
 
 					if (result.data?.editOrganizer?.organizer) {
@@ -128,12 +156,6 @@
 			>
 				Сохранить
 			</button>
-		</div>
-		<div class="flex-auto flex flex-col items-end gap-2">
-			<AvatarPlaceholder avatarClasses="rounded-lg p-2 aspect-square max-w-48 max-h-48 w-full">
-				<span class="text-4xl">{initialFullname.slice(0, 2).toUpperCase()}</span>
-			</AvatarPlaceholder>
-			<button class="btn btn-neutral btn-outline btn-sm max-w-48 w-full">Сменить фото</button>
 		</div>
 	</form>
 </div>

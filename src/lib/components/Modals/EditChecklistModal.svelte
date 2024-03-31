@@ -57,15 +57,15 @@
 		<slot />
 	</div>
 
-	<form slot="content" class="grid grid-cols-5 gap-2 items-center">
+	<form slot="content" class="grid grid-cols-5 gap-2 items-center w-full">
 		<LabeledInput
 			id="title"
 			name="title"
 			bind:value={checklist.title}
 			label="Название"
 			type="text"
-			labelClass="w-min col-span-1"
-			inputClass="w-full bg-primary/15 col-span-4 input-sm"
+			labelClass="w-min col-span-1 max-sm:col-span-5"
+			inputClass="w-full bg-primary/15 col-span-4 max-sm:col-span-5 input-sm"
 		/>
 		<span class="col-span-5">Задачи:</span>
 		{#each checklist.items as _, i}
@@ -73,11 +73,16 @@
 				<span>{i + 1}.</span>
 				<input type="checkbox" class="checkbox" bind:checked={checklist.items[i].done} />
 			</div>
+			<div class="col-span-4 flex flex-row items-center gap-1">
 			<input
 				type="text"
-				class="input input-bordered col-span-4 input-xs"
+				class="input input-bordered  input-xs w-full"
 				bind:value={checklist.items[i].title}
 			/>
+			<button class="btn btn-xs" onclick={() => {
+				checklist.items.splice(i, 1)
+			}}>x</button>
+		</div>
 		{/each}
 		<button
 			class="btn btn-sm btn-primary btn-outline col-span-5"
