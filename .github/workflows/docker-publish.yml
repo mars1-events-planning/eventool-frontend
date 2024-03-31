@@ -6,15 +6,16 @@ on:
 
 jobs:
   build-and-push:
-    permissions: write-all
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.versioning.outputs.version }}
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
       
       - name: Get the version number from commit count
         id: versioning
-        run: echo "VERSION=$(git rev-list --count HEAD)" >> $GITHUB_ENV
+        run: echo "::set-output name=version::$(git rev-list --count HEAD)"
       
       - name: Log in to the Container registry
         uses: docker/login-action@v1
@@ -32,21 +33,10 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: cr.eventool.online/eventool-frontend:${{ env.VERSION }}
-      
-      - name: Create GitHub Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.VERSION }}
-          release_name: Release ${{ env.VERSION }}
-          draft: false
-          prerelease: false
+          tags: cr.eventool.online/eventool-frontend:${{ steps.versioning.outputs.version }}
   
   update-swarm:
-    needs: build-and-push  # Ensure this job runs after the build-and-push job
+    needs: build-and-push
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -54,7 +44,7 @@ jobs:
 
       - name: Replace image tag in stack file
         run: |
-          export IMAGE_TAG=${{ env.VERSION }}
+          IMAGE_TAG=${{ needs.build-and-push.outputs.version }}
           envsubst < docker/eventool-frontend.yml > docker/eventool-frontend.generated.yml
 
       - name: Update Docker Swarm Stack
