@@ -63,4 +63,4 @@ jobs:
           username: ${{ secrets.SWARM_MANAGER_USERNAME }}
           key: ${{ secrets.SWARM_MANAGER_SSH_KEY }}
           script: |
-            docker stack deploy --with-registry-auth -c docker/eventool-frontend.generated.yml eventool-frontend
+            docker stack deploy --with-registry-auth -c tmp/eventool-frontend.generated.yml eventool-frontend
