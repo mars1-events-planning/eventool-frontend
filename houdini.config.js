@@ -3,7 +3,7 @@
 /** @type {import('houdini').ConfigFile} */
 const config = {
     "watchSchema": {
-        "url": "http://localhost:5275/graphql"
+        "url": "https://backend.eventool.online/graphql"
     },
     "plugins": {
         "houdini-svelte": {

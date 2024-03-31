@@ -47,6 +47,15 @@ jobs:
           IMAGE_TAG=${{ needs.build-and-push.outputs.version }}
           envsubst < docker/eventool-frontend.yml > docker/eventool-frontend.generated.yml
 
+      - name: Copy stack file to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SWARM_MANAGER_HOST }}
+          username: ${{ secrets.SWARM_MANAGER_USERNAME }}
+          key: ${{ secrets.SWARM_MANAGER_SSH_KEY }}
+          source: "docker/eventool-frontend.generated.yml"
+          target: "/tmp" # or any directory where you have permission to write on the server
+
       - name: Update Docker Swarm Stack
         uses: appleboy/ssh-action@master
         with:
