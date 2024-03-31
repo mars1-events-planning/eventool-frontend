@@ -43,3 +43,24 @@ jobs:
           release_name: Release ${{ env.VERSION }}
           draft: false
           prerelease: false
+  
+  update-swarm:
+    needs: build-and-push  # Ensure this job runs after the build-and-push job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Replace image tag in stack file
+        run: |
+          export IMAGE_TAG=${{ env.VERSION }}
+          envsubst < path/to/your/stack-file.template.yml > path/to/your/stack-file.yml
+
+      - name: Update Docker Swarm Stack
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SWARM_MANAGER_HOST }}
+          username: ${{ secrets.SWARM_MANAGER_USERNAME }}
+          key: ${{ secrets.SWARM_MANAGER_SSH_KEY }}
+          script: |
+            docker stack deploy --with-registry-auth -c docker/eventool-frontend.yml eventool-frontend
