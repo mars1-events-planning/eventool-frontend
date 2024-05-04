@@ -1,16 +1,29 @@
 <script lang="ts">
-	import { graphql } from '$houdini';
-	import EditChecklistModal from '$lib/components/Modals/EditChecklistModal.svelte';
-	import RoundProgress from '$lib/components/RoundProgress.svelte';
-	import type { Checklist } from '../eventsModel';
+	import { graphql } from "$houdini";
+	import EditChecklistModal from "$lib/components/Modals/EditChecklistModal.svelte";
+	import RoundProgress from "$lib/components/RoundProgress.svelte";
+	import type { Checklist } from "../eventsModel";
 
-	let { checklist, eventId } = $props<{ checklist: Checklist; eventId: string }>();
+	let { checklist, eventId } = $props<{
+		checklist: Checklist;
+		eventId: string;
+	}>();
 	let success: boolean | undefined = $state(undefined);
 
 	let store = graphql(`
-		mutation SaveChecklistWithCheckedItem($input: SaveChecklistInput!) {
-			saveChecklist(input: $input) {
+		mutation UpdateChecklist($input: SaveEventInput!) {
+			saveEvent(input: $input) {
 				gqlEvent {
+					id
+					title
+					creator {
+						id
+					}
+					createdAtUtc
+					changedAtUtc
+					startAtUtc
+					description
+					address
 					checklists {
 						id
 						title
@@ -21,10 +34,14 @@
 					}
 				}
 				errors {
+					code: __typename
+					... on Error {
+						message
+					}
 					... on ValidationError {
 						errors {
-							propertyName
 							errorMessage
+							propertyName
 						}
 					}
 				}
@@ -33,7 +50,9 @@
 	`);
 
 	let progress = $derived(
-		(checklist.items.filter((x) => x.done).length / checklist.items.length) * 100
+		(checklist.items.filter((x) => x.done).length /
+			checklist.items.length) *
+			100,
 	);
 
 	let getId = () => {
@@ -51,25 +70,30 @@
 	<div class="divider m-0"></div>
 	<div class="flex flex-col gap-2">
 		{#each checklist.items as item, i}
-			{@const id = checklist.id + '-' + i}
+			{@const id = checklist.id + "-" + i}
 			<div class="flex flex-row gap-4">
 				<input
 					type="checkbox"
-					id={id}
+					{id}
 					class="checkbox checkbox-primary"
 					checked={checklist.items[i].done}
 					onclick={async () => {
 						checklist.items[i].done = !checklist.items[i].done;
 						let result = await store.mutate({
 							input: {
-								eventId: eventId,
-								checklistId: checklist.id,
-								title: checklist.title,
-								items: checklist.items
-							}
+								input: {
+									eventId: eventId,
+									checklists: {
+										id: checklist.id,
+										title: checklist.title,
+										checklistItems: checklist.items,
+									}	
+								}
+								
+							},
 						});
 
-						if (result.data?.saveChecklist?.gqlEvent) {
+						if (result.data?.saveEvent?.gqlEvent) {
 							success = true;
 							return;
 						}

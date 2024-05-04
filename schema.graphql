@@ -16,39 +16,19 @@ type ChangePasswordPayload {
   organizer: Organizer
 }
 
+input ChecklistInput {
+  checklistItems: [ChecklistItemInput!]!
+  id: UUID
+  title: String!
+}
+
 input ChecklistItemInput {
   done: Boolean!
   title: String!
 }
 
-union CreateEventError = ValidationError
-
-input CreateEventInput {
-  title: String!
-}
-
-type CreateEventPayload {
-  errors: [CreateEventError!]
-  gqlEvent: GqlEvent
-}
-
 """The `DateTime` scalar represents an ISO-8601 compliant date time type."""
 scalar DateTime
-
-union EditEventError = UnauthorizedAccessError | ValidationError
-
-input EditEventInput {
-  address: String
-  description: String
-  eventId: UUID!
-  startDateTimeUtc: DateTime
-  title: String!
-}
-
-type EditEventPayload {
-  errors: [EditEventError!]
-  gqlEvent: GqlEvent
-}
 
 union EditOrganizerError = ValidationError
 
@@ -64,6 +44,15 @@ type EditOrganizerPayload {
 
 interface Error {
   message: String!
+}
+
+input EventInput {
+  address: String
+  checklists: [ChecklistInput!]
+  description: String
+  eventId: UUID
+  startDateTimeUtc: DateTime
+  title: String
 }
 
 type GqlChecklist {
@@ -111,12 +100,10 @@ type LoginPayload {
 
 type Mutation {
   changePassword(input: ChangePasswordInput!): ChangePasswordPayload!
-  createEvent(input: CreateEventInput!): CreateEventPayload!
-  editEvent(input: EditEventInput!): EditEventPayload!
   editOrganizer(input: EditOrganizerInput!): EditOrganizerPayload!
   login(input: LoginInput!): LoginPayload!
   registerOrganizer(input: RegisterOrganizerInput!): RegisterOrganizerPayload!
-  saveChecklist(input: SaveChecklistInput!): SaveChecklistPayload!
+  saveEvent(input: SaveEventInput!): SaveEventPayload!
 }
 
 type Organizer {
@@ -146,17 +133,14 @@ type RegisterOrganizerPayload {
   organizer: Organizer
 }
 
-union SaveChecklistError = UnauthorizedAccessError | ValidationError
+union SaveEventError = UnauthorizedAccessError | ValidationError
 
-input SaveChecklistInput {
-  checklistId: UUID
-  eventId: UUID!
-  items: [ChecklistItemInput!]!
-  title: String!
+input SaveEventInput {
+  input: EventInput!
 }
 
-type SaveChecklistPayload {
-  errors: [SaveChecklistError!]
+type SaveEventPayload {
+  errors: [SaveEventError!]
   gqlEvent: GqlEvent
 }
 

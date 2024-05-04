@@ -1,12 +1,14 @@
 <script lang="ts">
-	import { graphql } from '$houdini';
-	import SuccessPopup from '../SuccessPopup.svelte';
-	import LabeledInput from '../controls/LabeledInput.svelte';
-	import type { Checklist } from '../controls/eventsModel';
-	import Modal from './Modal.svelte';
+	import { graphql } from "$houdini";
+	import SuccessPopup from "../SuccessPopup.svelte";
+	import LabeledInput from "../controls/LabeledInput.svelte";
+	import type { Checklist } from "../controls/eventsModel";
+	import Modal from "./Modal.svelte";
 
-	let { initialChecklist, eventId } = $props<{ initialChecklist?: Checklist; eventId: string }>();
-
+	let { initialChecklist, eventId } = $props<{
+		initialChecklist?: Checklist;
+		eventId: string;
+	}>();
 
 	let success: boolean | undefined = $state(false);
 	let checklist: Checklist = $state(null!);
@@ -16,20 +18,30 @@
 			initialChecklist ??
 			({
 				id: null!,
-				title: '',
-				items: []
+				title: "",
+				items: [],
 			} as Checklist);
 		success = undefined;
-	}
+	};
 
 	$effect.pre(() => {
-		reset()
+		reset();
 	});
 
 	let store = graphql(`
-		mutation SaveChecklist($input: SaveChecklistInput!) {
-			saveChecklist(input: $input) {
+		mutation SaveChecklist($input: SaveEventInput!) {
+			saveEvent(input: $input) {
 				gqlEvent {
+					id
+					title
+					creator {
+						id
+					}
+					createdAtUtc
+					changedAtUtc
+					startAtUtc
+					description
+					address
 					checklists {
 						id
 						title
@@ -40,10 +52,14 @@
 					}
 				}
 				errors {
+					code: __typename
+					... on Error {
+						message
+					}
 					... on ValidationError {
 						errors {
-							propertyName
 							errorMessage
+							propertyName
 						}
 					}
 				}
@@ -52,7 +68,7 @@
 	`);
 </script>
 
-<Modal title="Сохранить этап мероприятия" onClose={() => reset()}>
+<Modal title="Сохранить чеклист" onClose={() => reset()}>
 	<div slot="button">
 		<slot />
 	</div>
@@ -71,25 +87,32 @@
 		{#each checklist.items as _, i}
 			<div class="flex flex-row items-center justify-between">
 				<span>{i + 1}.</span>
-				<input type="checkbox" class="checkbox" bind:checked={checklist.items[i].done} />
+				<input
+					type="checkbox"
+					class="checkbox"
+					bind:checked={checklist.items[i].done}
+				/>
 			</div>
 			<div class="col-span-4 flex flex-row items-center gap-1">
-			<input
-				type="text"
-				class="input input-bordered  input-xs w-full"
-				bind:value={checklist.items[i].title}
-			/>
-			<button class="btn btn-xs" onclick={() => {
-				checklist.items.splice(i, 1)
-			}}>x</button>
-		</div>
+				<input
+					type="text"
+					class="input input-bordered input-xs w-full"
+					bind:value={checklist.items[i].title}
+				/>
+				<button
+					class="btn btn-xs"
+					onclick={() => {
+						checklist.items.splice(i, 1);
+					}}>x</button
+				>
+			</div>
 		{/each}
 		<button
 			class="btn btn-sm btn-primary btn-outline col-span-5"
 			onclick={() => {
 				checklist.items.push({
 					done: false,
-					title: ''
+					title: "",
 				});
 			}}
 		>
@@ -104,14 +127,18 @@
 			onclick={async () => {
 				let result = await store.mutate({
 					input: {
-						eventId: eventId,
-						checklistId: checklist.id,
-						title: checklist.title,
-						items: checklist.items
-					}
+						input: {
+							eventId: eventId,
+							checklists: {
+								id: checklist.id,
+								title: checklist.title,
+								checklistItems: checklist.items,
+							},
+						},
+					},
 				});
 
-				if (result.data?.saveChecklist?.gqlEvent) {
+				if (result.data?.saveEvent?.gqlEvent) {
 					success = true;
 					return;
 				}
