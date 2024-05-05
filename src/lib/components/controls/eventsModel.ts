@@ -9,6 +9,14 @@ export type Checklist = {
     items: Todo[];
 }
 
+export type Guest = {
+    id: string;
+    name: string;
+    contact: string;
+    photoUrl: string | null;
+    tags: string[];
+}
+
 export type EventModel = {
     id: string;
     title: string;
@@ -16,4 +24,5 @@ export type EventModel = {
     address: string | null;
     startAtUtc: string | null;
     checklists: Checklist[];
+    guests: Guest[];
 }

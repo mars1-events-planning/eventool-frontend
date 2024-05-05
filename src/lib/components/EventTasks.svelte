@@ -21,8 +21,8 @@
 			<RoundProgress progressPercent={progress} />
 		</div>
 	</div>
-	<div slot="content" class="flex flex-col gap-4">
-		<div class="flex flex-col w-full items-center">
+	<div slot="content" class="flex flex-col">
+		<div class="flex flex-col w-full items-start m-0 ">
 			<EditChecklistModal eventId={event.id}>
 				<button
 					type="button"
@@ -33,7 +33,9 @@
 				</button>
 			</EditChecklistModal>
 		</div>
+		<div class="divider mt-0"></div>
 
+		{#if event.checklists.length > 0}
 		<div class="flex flex-wrap gap-5 justify-normal">
 			{#each event.checklists as _, i}
 				<Checklist
@@ -43,5 +45,8 @@
 			{/each}
 			<div class="flex flex-col w-full items-center"></div>
 		</div>
+		{:else}
+			Задач пока нет
+		{/if}
 	</div>
 </Collapse>

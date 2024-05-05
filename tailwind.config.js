@@ -9,7 +9,7 @@ export default {
       },
     },
   },
-  plugins: [require("daisyui"),require('@tailwindcss/line-clamp')],
+  plugins: [require("daisyui")],
   daisyui: {
     themes: [
       {
@@ -20,14 +20,22 @@ export default {
           "primary-content": "#FFFFFF",
           "error-content": "#FFFFFF"
         },
-        "dark":{
-          ...require("daisyui/src/theming/themes")["dark"],
+        "dim":{
+          ...require("daisyui/src/theming/themes")["dim"],
           "primary": "#3ABD67",
           "font-family": "Nunito, sans-serif",
           "primary-content": "#FFFFFF",
           "error-content": "#FFFFFF",
           "error": "#D70040"
         },
+        "night": {
+          ...require("daisyui/src/theming/themes")["night"],
+          "primary": "#3ABD67",
+          "font-family": "Nunito, sans-serif",
+          "primary-content": "#FFFFFF",
+          "error-content": "#FFFFFF",
+          "error": "#D70040"
+        }
       }
     ],
   },

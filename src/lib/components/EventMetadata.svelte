@@ -4,6 +4,7 @@
 	import type { EventModel } from "$lib/components/controls/eventsModel";
 	import { formatDateString } from "$lib/utils";
     import Collapse from "./Collapse.svelte";
+    import Trash from "./icons/Trash.svelte";
 
 	let { event } = $props<{ event: EventModel }>();
 
@@ -16,9 +17,22 @@
 	};
 </script>
 
-<Collapse>
-	<span slot="title" class="font-semibold">Основные данные</span>
-	<div slot="content" class="flex flex-col gap-4">
+<Collapse checked canBeClosed={false}>
+	<span slot="title" class="font-semibold">Событие: «{event.title}»</span>
+	<div slot="content" class="flex flex-col">
+		<div class="flex flex-row w-full items-start max-sm:items-center gap-4">
+			<EditEventModal bind:event>
+				<button class="btn btn-neutral btn-outline btn-xs"
+					><Edit size={20} /> Редактировать</button
+				>
+			</EditEventModal>
+			<EditEventModal bind:event>
+				<button class="btn btn-error btn-outline btn-xs"
+					><Trash size={20} /> Удалить событие</button
+				>
+			</EditEventModal>
+		</div>
+		<div class="divider mt-0"></div>
 		<div class="grid grid-cols-8 font-sm gap-2">
 			<span class="col-span-2 max-sm:col-span-8">Aдрес:</span>
 			<span class="col-span-6 font-thin max-sm:col-span-8"
@@ -36,13 +50,6 @@
 			<span class="col-span-6 font-thin max-sm:col-span-8"
 				>{event.description}</span
 			>
-		</div>
-		<div class="flex flex-col w-full items-start max-sm:items-center">
-			<EditEventModal bind:event>
-				<button class="btn btn-neutral btn-outline btn-xs"
-					><Edit size={20} /> Редактировать</button
-				>
-			</EditEventModal>
 		</div>
 	</div>
 </Collapse>
