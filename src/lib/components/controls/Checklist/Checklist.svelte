@@ -55,6 +55,10 @@
 			100,
 	);
 
+	let requestInProgress = $derived(
+		$store.fetching
+	);
+
 	let getId = () => {
 		crypto.randomUUID();
 	};
@@ -77,6 +81,7 @@
 					{id}
 					class="checkbox checkbox-primary"
 					checked={checklist.items[i].done}
+					disabled={requestInProgress}
 					onclick={async () => {
 						checklist.items[i].done = !checklist.items[i].done;
 						let result = await store.mutate({

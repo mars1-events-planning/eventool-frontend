@@ -15,7 +15,7 @@
 <label class="cursor-pointer grid place-items-center">
 	<input
 		type="checkbox"
-		value="dim"
+		value="dark"
 		class="toggle theme-controller bg-base-content row-start-1 col-start-1 col-span-2"
 		bind:checked
 	/>

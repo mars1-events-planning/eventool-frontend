@@ -56,7 +56,9 @@
 					{@const changedAt = formatDateString(e.changedAtUtc)}
 
 					<div
-						class="flex flex-col border border-base-300 rounded-md p-4 max-w-[300px] min-w-[300px]"
+						class="flex flex-col border rounded-md p-4 max-w-[300px] min-w-[300px]
+						shadow-lg shadow-base-content/25
+						hover:shadow-primary/50 hover:border-primary hover:ease-in hover:duration-100"
 					>
 						<a href={`/event/${e.id}/edit`}>
 							<div

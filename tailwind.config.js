@@ -20,8 +20,8 @@ export default {
           "primary-content": "#FFFFFF",
           "error-content": "#FFFFFF"
         },
-        "dim":{
-          ...require("daisyui/src/theming/themes")["dim"],
+        "dark":{
+          ...require("daisyui/src/theming/themes")["dark"],
           "primary": "#3ABD67",
           "font-family": "Nunito, sans-serif",
           "primary-content": "#FFFFFF",

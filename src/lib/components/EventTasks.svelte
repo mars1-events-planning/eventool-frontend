@@ -3,6 +3,7 @@
 	import RoundProgress from "$lib/components/RoundProgress.svelte";
 	import EditChecklistModal from "./Modals/EditChecklistModal.svelte";
 	import type { EventModel } from "./controls/eventsModel";
+    import Collapse from "./Collapse.svelte";
 
 	let { event } = $props<{ event: EventModel }>();
 
@@ -13,38 +14,34 @@
 	);
 </script>
 
-<div class="w-full flex flex-col border border-primary rounded-lg">
-	<div class="collapse collapse-arrow">
-		<input type="checkbox" />
-		<div class="collapse-title">
-			<div class="flex flex-row gap-4 items-center justify-between">
-				<span class="font-semibold">Задачи</span>
-				<RoundProgress progressPercent={progress} />
-			</div>
-		</div>
-
-		<div class="collapse-content flex flex-col gap-4">
-			<div class="flex flex-col w-full items-center">
-				<EditChecklistModal eventId={event.id}>
-					<button
-						type="button"
-						class="btn btn-primary btn-outline text-xs font-bold btn-sm"
-					>
-						<span class="text-xl">+</span>
-						<span>Добавить список задач</span>
-					</button>
-				</EditChecklistModal>
-			</div>
-
-			<div class="flex flex-wrap gap-5 justify-normal">
-				{#each event.checklists as _, i}
-					<Checklist
-						checklist={event.checklists[i]}
-						eventId={event.id}
-					/>
-				{/each}
-				<div class="flex flex-col w-full items-center"></div>
-			</div>
+<Collapse>
+	<div slot="title">
+		<div class="flex flex-row gap-4 items-center justify-between">
+			<span class="font-semibold">Задачи</span>
+			<RoundProgress progressPercent={progress} />
 		</div>
 	</div>
-</div>
+	<div slot="content" class="flex flex-col gap-4">
+		<div class="flex flex-col w-full items-center">
+			<EditChecklistModal eventId={event.id}>
+				<button
+					type="button"
+					class="btn btn-primary btn-outline text-xs font-bold btn-sm"
+				>
+					<span class="text-xl">+</span>
+					<span>Добавить список задач</span>
+				</button>
+			</EditChecklistModal>
+		</div>
+
+		<div class="flex flex-wrap gap-5 justify-normal">
+			{#each event.checklists as _, i}
+				<Checklist
+					checklist={event.checklists[i]}
+					eventId={event.id}
+				/>
+			{/each}
+			<div class="flex flex-col w-full items-center"></div>
+		</div>
+	</div>
+</Collapse>

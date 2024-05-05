@@ -44,7 +44,7 @@
 			</h1>
 
 			<EventMetadata {event} />
-			<!-- <EventGuests /> PREZA!!!! -->
+			<EventGuests />
 			<EventTasks {event} />
 		</div>
 	{/if}

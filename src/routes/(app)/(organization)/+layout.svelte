@@ -19,7 +19,7 @@
 	<div class="drawer-side ">
 		<label for="navbar-drawer" aria-label="close sidebar" class="drawer-overlay "></label>
 
-		<div class="drawer-menu flex flex-col shadow-lg min-h-[95%] my-5 mx-5 rounded-2xl border pt-5 z-10 pointer-events-auto ">
+		<div class="drawer-menu flex flex-col shadow-lg shadow-base-content/25 min-h-[95%] my-5 mx-5 rounded-2xl border pt-5 z-10 pointer-events-auto ">
 			<label for="navbar-drawer" aria-label="close sidebar" class="drawer-close btn btn-ghost btn-circle absolute top-1 btn-sm right-1 text-xl font-bold">x</label>
 			<ul class="menu p-4 w-80 max-sm:w-60 text-base-content text-lg overflow-y-hidden overflow-x-hidden ">
 				<li>
