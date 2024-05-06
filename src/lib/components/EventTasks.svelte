@@ -3,7 +3,7 @@
 	import RoundProgress from "$lib/components/RoundProgress.svelte";
 	import EditChecklistModal from "./Modals/EditChecklistModal.svelte";
 	import type { EventModel } from "./controls/eventsModel";
-    import Collapse from "./Collapse.svelte";
+	import Collapse from "./Collapse.svelte";
 
 	let { event } = $props<{ event: EventModel }>();
 
@@ -22,29 +22,27 @@
 		</div>
 	</div>
 	<div slot="content" class="flex flex-col">
-		<div class="flex flex-col w-full items-start m-0 ">
+		<div class="divider divider-end">
 			<EditChecklistModal eventId={event.id}>
 				<button
 					type="button"
-					class="btn btn-primary btn-outline text-xs font-bold btn-sm"
+					class="btn btn-primary btn-outline font-bold btn-xs"
 				>
-					<span class="text-xl">+</span>
-					<span>Добавить список задач</span>
+					<span class="text-base">+</span>
 				</button>
 			</EditChecklistModal>
 		</div>
-		<div class="divider mt-0"></div>
 
 		{#if event.checklists.length > 0}
-		<div class="flex flex-wrap gap-5 justify-normal">
-			{#each event.checklists as _, i}
-				<Checklist
-					checklist={event.checklists[i]}
-					eventId={event.id}
-				/>
-			{/each}
-			<div class="flex flex-col w-full items-center"></div>
-		</div>
+			<div class="flex flex-wrap gap-5 justify-normal">
+				{#each event.checklists as _, i}
+					<Checklist
+						checklist={event.checklists[i]}
+						eventId={event.id}
+					/>
+				{/each}
+				<div class="flex flex-col w-full items-center"></div>
+			</div>
 		{:else}
 			Задач пока нет
 		{/if}

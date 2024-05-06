@@ -5,7 +5,8 @@
 	}>();
 
 	let opened = $state(false);
-	let close = () => {
+
+	export function close() {
 		opened = false;
 		if (props.onClose) props.onClose();
 	};

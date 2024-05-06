@@ -19,30 +19,30 @@
 		</div>
 	</div>
 	<div slot="content" class="overflow-x-auto">
-		<div class="flex flex-col w-full items-start">
-			<SaveGuestModal eventId={event.id}>
-				<button
-					type="button"
-					class="btn btn-primary btn-outline text-xs font-bold btn-sm"
-				>
-					<span class="text-xl">+</span>
-					<span>Добавить гостя</span>
-				</button>
-			</SaveGuestModal>
+		<div class="divider divider-end">
+			<div class="flex flex-col items-end">
+				<SaveGuestModal eventId={event.id}>
+					<button
+						type="button"
+						class="btn btn-primary btn-outline text-xs font-bold btn-xs"
+					>
+						<span class="text-base">+</span>
+					</button>
+				</SaveGuestModal>
+			</div>
 		</div>
-		<div class="divider mt-0"></div>
 		{#if guests.length > 0}
-			<div class="overflow-x-auto">
-				<table class="table">
+			<div class="overflow-x-auto overflow-y-scroll max-h-[400px]">
+				<table class="table table-pin-rows">
 					<!-- head -->
-					<thead>
-						<tr>
+					<thead class="">
+						<tr class="shadow-md">
 							<th>Гость</th>
 							<th>Теги</th>
 							<th></th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody class="">
 						{#each guests as g}
 							<!-- row 1 -->
 							<tr>
@@ -58,7 +58,7 @@
 														alt="avatar"
 													/>
 												{:else}
-													<Person size={30}/>
+													<Person size={30} />
 												{/if}
 											</div>
 										</div>

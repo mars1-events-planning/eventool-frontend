@@ -3,10 +3,29 @@
 	import Edit from "./icons/Edit.svelte";
 	import type { EventModel } from "$lib/components/controls/eventsModel";
 	import { formatDateString } from "$lib/utils";
-    import Collapse from "./Collapse.svelte";
-    import Trash from "./icons/Trash.svelte";
+	import Collapse from "./Collapse.svelte";
+	import Trash from "./icons/Trash.svelte";
+	import WithConfirmation from "./Modals/WithConfirmation.svelte";
+	import { graphql } from "$houdini";
+    import { goto } from "$app/navigation";
 
 	let { event } = $props<{ event: EventModel }>();
+
+	let store = graphql(`
+		mutation DeleteEvent($input: DeleteEventInput!) {
+			deleteEvent(input: $input) {
+				gqlEvent {
+					id
+				}
+				errors {
+					code: __typename
+					... on Error {
+						message
+					}
+				}
+			}
+		}
+	`);
 
 	const renderValue = (value: string | null | undefined) => {
 		if (value && value.length > 0) {
@@ -20,19 +39,38 @@
 <Collapse checked canBeClosed={false}>
 	<span slot="title" class="font-semibold">Событие: «{event.title}»</span>
 	<div slot="content" class="flex flex-col">
-		<div class="flex flex-row w-full items-start max-sm:items-center gap-4">
-			<EditEventModal bind:event>
-				<button class="btn btn-neutral btn-outline btn-xs"
-					><Edit size={20} /> Редактировать</button
+		<div class="divider divider-end">
+			<div class="flex flex-row-reverse max-sm:items-center gap-4">
+				<EditEventModal bind:event>
+					<button class="btn btn-neutral btn-outline btn-xs"
+						><Edit size={15} /></button
+					>
+				</EditEventModal>
+				<WithConfirmation
+					title="Удалить событие"
+					text="Вы уверены что хотите удалить событие? Восстановить его будет невозможно!"
+					onCancelled={() => {}}
+					onConfirmed={async () => {
+						let result = await store.mutate({
+							input: {
+								eventId: event.id,
+							},
+						});
+
+						if (result.data?.deleteEvent?.gqlEvent) {
+							await goto(
+								`/list`,
+							);
+							return;
+						}
+					}}
 				>
-			</EditEventModal>
-			<EditEventModal bind:event>
-				<button class="btn btn-error btn-outline btn-xs"
-					><Trash size={20} /> Удалить событие</button
-				>
-			</EditEventModal>
+					<button class="btn btn-error btn-outline btn-xs">
+						<Trash size={15} />
+					</button>
+				</WithConfirmation>
+			</div>
 		</div>
-		<div class="divider mt-0"></div>
 		<div class="grid grid-cols-8 font-sm gap-2">
 			<span class="col-span-2 max-sm:col-span-8">Aдрес:</span>
 			<span class="col-span-6 font-thin max-sm:col-span-8"
