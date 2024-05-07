@@ -2,6 +2,7 @@
 	import { page } from "$app/stores";
 	import { graphql } from "$houdini";
 	import Authorized from "$lib/components/Authorized.svelte";
+    import EventGallery from "$lib/components/EventGallery.svelte";
 	import EventGuests from "$lib/components/EventGuests.svelte";
 	import EventMetadata from "$lib/components/EventMetadata.svelte";
 	import EventTasks from "$lib/components/EventTasks.svelte";
@@ -46,6 +47,7 @@
 	{:else if event}
 		<div class="flex flex-col gap-5 max-lg:items-center">
 			<EventMetadata {event} />
+			<EventGallery />
 			<EventGuests {event} />
 			<EventTasks {event} />
 		</div>

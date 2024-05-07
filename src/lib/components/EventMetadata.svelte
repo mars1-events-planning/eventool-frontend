@@ -65,9 +65,9 @@
 						}
 					}}
 				>
-					<button class="btn btn-error btn-outline btn-xs">
+					<div class="btn btn-error btn-outline btn-xs" role="button">
 						<Trash size={15} />
-					</button>
+					</div>
 				</WithConfirmation>
 			</div>
 		</div>
