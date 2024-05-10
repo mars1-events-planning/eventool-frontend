@@ -7,7 +7,9 @@
 	import Trash from "./icons/Trash.svelte";
 	import WithConfirmation from "./Modals/WithConfirmation.svelte";
 	import { graphql } from "$houdini";
-    import { goto } from "$app/navigation";
+	import { goto } from "$app/navigation";
+	import NotesModal from "./Modals/NotesModal.svelte";
+    import Note from "./icons/Note.svelte";
 
 	let { event } = $props<{ event: EventModel }>();
 
@@ -40,12 +42,17 @@
 	<span slot="title" class="font-semibold">Событие: «{event.title}»</span>
 	<div slot="content" class="flex flex-col">
 		<div class="divider divider-end">
-			<div class="flex flex-row-reverse max-sm:items-center gap-4">
+			<div class="flex flex-row-reverse items-center gap-4">
 				<EditEventModal bind:event>
 					<button class="btn btn-neutral btn-outline btn-xs"
 						><Edit size={15} /></button
 					>
 				</EditEventModal>
+				<NotesModal>
+					<div class="btn btn-neutral btn-outline btn-xs">
+						<Note size={15}/>
+					</div>
+				</NotesModal>
 				<WithConfirmation
 					title="Удалить событие"
 					text="Вы уверены что хотите удалить событие? Восстановить его будет невозможно!"
@@ -58,9 +65,7 @@
 						});
 
 						if (result.data?.deleteEvent?.gqlEvent) {
-							await goto(
-								`/list`,
-							);
+							await goto(`/list`);
 							return;
 						}
 					}}

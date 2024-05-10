@@ -21,7 +21,7 @@
 	class="modal backdrop-blur-sm backdrop-brightness-75"
 	open={opened}
 >
-	<div class="modal-box max-w-4xl w-auto mx-auto overflow-y-auto p-4">
+	<div class="modal-box w-auto max-w-[100vw] mx-auto overflow-y-auto p-4">
 		<div class="flex flex-col gap-2">
 			<div class="flex flex-row justify-between items-center font-medium">
 				<p class=" text-base">{props.title}</p>

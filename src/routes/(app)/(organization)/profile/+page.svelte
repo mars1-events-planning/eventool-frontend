@@ -88,13 +88,6 @@
 			const errorMessage = await response.text();
 			throw new Error(errorMessage);
 		}
-
-		// Handle the response from the server
-		const result = await response.json();
-		console.log('Avatar uploaded successfully:', result);
-
-		await currentOrganizerDataStore.fetch()
-		return result;
 	}
 </script>
 

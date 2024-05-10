@@ -30,6 +30,7 @@ export default {
         },
         "night": {
           ...require("daisyui/src/theming/themes")["night"],
+          "base-100": "#000000",
           "primary": "#3ABD67",
           "font-family": "Nunito, sans-serif",
           "primary-content": "#FFFFFF",

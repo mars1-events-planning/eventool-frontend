@@ -54,7 +54,7 @@
 
 		{#if events.length > 0}
 			<div
-				class="grid grid-flow-row auto-rows-max grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-10"
+				class="grid grid-flow-row auto-rows-max grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-10 justify-items-center"
 			>
 				{#each events as e}
 					{@const createdAt = formatDateString(e.createdAtUtc)}

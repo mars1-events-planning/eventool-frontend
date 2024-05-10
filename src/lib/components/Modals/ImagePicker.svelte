@@ -3,7 +3,7 @@
     import Confirm from "$lib/components/icons/Confirm.svelte";
 
     let { onSubmit, id = null } = $props<{
-        onSubmit: (file: File) => void;
+        onSubmit: (file: File) => Promise<void>;
         id: string | null;
     }>();
 
@@ -43,11 +43,11 @@
                 <button
                     type="button"
                     class="btn btn-xs btn-primary"
-                    onclick={() => {
+                    onclick={async () => {
                         if (selectedFile) {
                             console.log("on submit");
-                            onSubmit(selectedFile);
-                            modal.close();
+                            await onSubmit(selectedFile).then(() => modal.close());
+                            
                         }
                         console.log("on submit but NO image");
                     }}
