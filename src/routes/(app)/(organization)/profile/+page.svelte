@@ -3,12 +3,13 @@
 	import AvatarPlaceholder from "$lib/components/AvatarPlaceholder.svelte";
 	import Collapse from "$lib/components/Collapse.svelte";
 	import ChangePassword from "$lib/components/Modals/ChangePassword.svelte";
+    import ImagePicker from "$lib/components/Modals/ImagePicker.svelte";
 	import WithConfirmation from "$lib/components/Modals/WithConfirmation.svelte";
 	import LabeledInput from "$lib/components/controls/LabeledInput.svelte";
 	import ValidationErrorsList from "$lib/components/controls/ValidationErrorsList.svelte";
 	import Confirm from "$lib/components/icons/Confirm.svelte";
-    import Password from "$lib/components/icons/Password.svelte";
-    import Photo from "$lib/components/icons/Photo.svelte";
+	import Password from "$lib/components/icons/Password.svelte";
+	import Photo from "$lib/components/icons/Photo.svelte";
 	import Trash from "$lib/components/icons/Trash.svelte";
 
 	const currentOrganizerDataStore = graphql(`
@@ -17,6 +18,7 @@
 				id
 				fullname
 				username
+				photoUrl
 			}
 		}
 	`);
@@ -28,6 +30,7 @@
 					id
 					fullname
 					username
+					photoUrl
 				}
 				errors {
 					code: __typename
@@ -49,6 +52,7 @@
 	let initialUsername = $state("");
 	let fullname = $state("");
 	let username = $state("");
+	let photoUrl: string | null | undefined = $state(undefined);
 	let validationErrors = $derived(
 		$editStore.data?.editOrganizer?.errors
 			?.filter((error) => error.code === "ValidationError")
@@ -62,9 +66,36 @@
 			initialUsername = data.data?.organizer?.username ?? "";
 			fullname = initialFullname;
 			username = initialUsername;
+			photoUrl = data.data?.organizer?.photoUrl;
 		});
 	});
 
+	let onImageSubmit = async (file: File) => {
+		const formData = new FormData();
+  		formData.append('image', file);
+
+		// Make the POST request to upload the avatar
+		const response = await fetch('/api/set-avatar', {
+      		method: 'POST',
+     		body: formData,
+			headers: {
+				'Authorization': `Bearer ${localStorage.getItem('auth-token')}`
+			},
+      		credentials: 'include'
+    	});
+
+		if (!response.ok) {
+			const errorMessage = await response.text();
+			throw new Error(errorMessage);
+		}
+
+		// Handle the response from the server
+		const result = await response.json();
+		console.log('Avatar uploaded successfully:', result);
+
+		await currentOrganizerDataStore.fetch()
+		return result;
+	}
 </script>
 
 <div
@@ -93,11 +124,8 @@
 							});
 
 							if (result.data?.editOrganizer?.organizer) {
-								mutationSuccess = true;
 								return;
 							}
-
-							mutationSuccess = false;
 						}}
 					>
 						<Confirm size={15} />
@@ -111,9 +139,12 @@
 						</div>
 					</ChangePassword>
 
-					<button class="btn btn-neutral btn-outline btn-xs">
-						<Photo size={15} />
-					</button>
+					<ImagePicker onSubmit={onImageSubmit}>
+						<div class="btn btn-neutral btn-outline btn-xs">
+							<Photo size={15} />
+						</div>
+					</ImagePicker>
+					
 
 					<WithConfirmation
 						title="Удалить профиль"
@@ -121,20 +152,34 @@
 						onCancelled={() => {}}
 						onConfirmed={async () => {}}
 					>
-						<div class="btn btn-error btn-outline btn-xs" role="button">
+						<div
+							class="btn btn-error btn-outline btn-xs"
+							role="button"
+						>
 							<Trash size={15} />
 						</div>
 					</WithConfirmation>
 				</div>
 			</div>
 			<form class="flex items-center flex-row gap-4 w-max">
-				<AvatarPlaceholder
-					avatarClasses="rounded-lg p-2 aspect-square w-[35%]"
-				>
-					<span class="text-4xl"
-						>{initialFullname.slice(0, 2).toUpperCase()}</span
+				{#if photoUrl}
+					<div class="avatar">
+						<div class="rounded w-32">
+							<img
+								src={photoUrl}
+								alt="avatar"
+								/>
+						</div>
+					</div>
+				{:else}
+					<AvatarPlaceholder
+						avatarClasses="rounded-lg p-2 aspect-square w-[35%]"
 					>
-				</AvatarPlaceholder>
+						<span class="text-4xl"
+							>{initialFullname.slice(0, 2).toUpperCase()}</span
+						>
+					</AvatarPlaceholder>
+				{/if}
 				<div class="flex-grow grid grid-cols-5 gap-4 w-fit">
 					<div class="grid grid-cols-subgrid col-span-5 items-center">
 						<LabeledInput

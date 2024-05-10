@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Collapse from "./Collapse.svelte";
+	import ImagePicker from "./Modals/ImagePicker.svelte";
 	import SaveGuestModal from "./Modals/SaveGuestModal.svelte";
 	import type { EventModel } from "./controls/eventsModel";
 	import Edit from "./icons/Edit.svelte";
@@ -8,6 +9,36 @@
 	let { event } = $props<{ event: EventModel }>();
 
 	let guests = $derived(event.guests);
+
+	let imageSubmitFactory = (guestId: string) => {
+		return async (file: File) => {
+			const formData = new FormData();
+			formData.append('image', file);
+			formData.append('eventId', event.id);
+			formData.append('guestId', guestId);
+
+			// Make the POST request to upload the avatar
+			const response = await fetch('/api/set-guest-avatar', {
+				method: 'POST',
+				body: formData,
+				headers: {
+					'Authorization': `Bearer ${localStorage.getItem('auth-token')}`
+				},
+				credentials: 'include'
+			});
+
+			if (!response.ok) {
+				const errorMessage = await response.text();
+				throw new Error(errorMessage);
+			}
+
+			// Handle the response from the server
+			const result = await response.json();
+			console.log('Avatar uploaded successfully:', result);
+
+			return result;
+		}
+	}
 </script>
 
 <Collapse>
@@ -22,12 +53,11 @@
 		<div class="divider divider-end">
 			<div class="flex flex-col items-end">
 				<SaveGuestModal eventId={event.id}>
-					<button
-						type="button"
+					<div
 						class="btn btn-primary btn-outline text-xs font-bold btn-xs"
 					>
 						<span class="text-base">+</span>
-					</button>
+				</div>
 				</SaveGuestModal>
 			</div>
 		</div>
@@ -43,25 +73,26 @@
 						</tr>
 					</thead>
 					<tbody class="">
-						{#each guests as g}
-							<!-- row 1 -->
+						{#each guests as g (g.id)}
 							<tr>
 								<td class="">
 									<div class="flex items-center gap-3">
-										<div class="avatar">
-											<div
-												class="mask mask-squircle w-12 h-12"
-											>
-												{#if g.photoUrl}
-													<img
-														src={g.photoUrl}
-														alt="avatar"
-													/>
-												{:else}
-													<Person size={30} />
-												{/if}
+										<ImagePicker onSubmit={async (f)=>{await imageSubmitFactory(g.id)(f)}} id={g.id}>
+											<div class="avatar">
+												<div
+													class="mask mask-squircle w-12 h-12"
+												>
+													{#if g.photoUrl}
+														<img
+															src={g.photoUrl}
+															alt="avatar"
+														/>
+													{:else}
+														<Person size={30} />
+													{/if}
+												</div>
 											</div>
-										</div>
+										</ImagePicker>
 										<div>
 											<div class="font-bold">
 												{g.name}

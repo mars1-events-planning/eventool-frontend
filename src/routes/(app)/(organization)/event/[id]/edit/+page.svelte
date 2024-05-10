@@ -16,6 +16,7 @@
 				address
 				description
 				startAtUtc
+				photos
 				checklists {
 					id
 					title
@@ -28,6 +29,7 @@
 					id
 					name
 					contact
+					photoUrl
 					tags
 				}
 			}
@@ -47,7 +49,7 @@
 	{:else if event}
 		<div class="flex flex-col gap-5 max-lg:items-center">
 			<EventMetadata {event} />
-			<EventGallery />
+			<EventGallery {event} />
 			<EventGuests {event} />
 			<EventTasks {event} />
 		</div>

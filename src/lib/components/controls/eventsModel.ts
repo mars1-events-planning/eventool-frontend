@@ -23,6 +23,7 @@ export type EventModel = {
     description: string | null;
     address: string | null;
     startAtUtc: string | null;
+    photos: string[];
     checklists: Checklist[];
     guests: Guest[];
 }

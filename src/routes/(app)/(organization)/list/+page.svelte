@@ -13,6 +13,7 @@
 				title
 				createdAtUtc
 				changedAtUtc
+				photos
 			}
 		}
 	`);
@@ -39,19 +40,22 @@
 
 <Authorized>
 	<div class="flex flex-col gap-2 max-lg:items-center overflow-x-auto">
+		<h1 class="font-semibold text-xl">Список событий</h1>
 		<div
-			class="flex flex-row w-full items-center gap-5 max-md:flex-row-reverse max-md:justify-between"
+			class="divider divider-end"
 		>
 			<CreateEventModal>
-				<div class="btn btn-primary btn-sm">
+				<div class="btn btn-primary btn-sm btn-outline">
 					<Create size={20} />
 				</div>
 			</CreateEventModal>
-			<h1 class="font-semibold text-xl">Список событий</h1>
+			
 		</div>
 
 		{#if events.length > 0}
-			<div class="grid grid-flow-row auto-rows-max grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-10">
+			<div
+				class="grid grid-flow-row auto-rows-max grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-10"
+			>
 				{#each events as e}
 					{@const createdAt = formatDateString(e.createdAtUtc)}
 					{@const changedAt = formatDateString(e.changedAtUtc)}
@@ -71,18 +75,28 @@
 									class="avatar placeholder text-neutral-content"
 								>
 									<div class="bg-primary rounded-md">
-										<img
-											src="https://wishpics.ru/site-images/wishpics_ru_3145.jpg"
-											alt={e.title.slice(0, 2)}
-										/>
+										{#if e.photos.length > 0}
+											<img
+												src={e.photos[0]}
+												alt={e.title.slice(0, 2)}
+											/>
+										{:else}
+											<img
+												src="https://wishpics.ru/site-images/wishpics_ru_3145.jpg"
+												alt={e.title.slice(0, 2)}
+											/>
+										{/if}
 									</div>
 								</div>
 								<div
 									class="flex flex-col gap-1 justify-between"
 								>
-									<div class="min-h-[60px] max-h-[60px] max-w-[220px] flex-grow w-full overflow-hidden">
+									<div
+										class="min-h-[60px] max-h-[60px] max-w-[220px] flex-grow w-full overflow-hidden"
+									>
 										<!-- WANT TO BREAK THIS TEXT SO IT NOT OVERGROW THE CARD -->
-										<span class="font-semibold block truncate whitespace-break-spaces overflow-ellipsis"
+										<span
+											class="font-semibold block truncate whitespace-break-spaces overflow-ellipsis"
 											>{e.title}</span
 										>
 									</div>
