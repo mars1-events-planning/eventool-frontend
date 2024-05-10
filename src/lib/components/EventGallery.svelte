@@ -13,7 +13,7 @@
 		formData.append('eventId', event.id);
 
 		// Make the POST request to upload the avatar
-		const response = await fetch('/api/add-event-image', {
+		const response = await fetch('https://backend.eventool.online/api/add-event-image', {
       		method: 'POST',
      		body: formData,
 			headers: {

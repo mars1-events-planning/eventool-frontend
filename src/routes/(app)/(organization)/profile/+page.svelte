@@ -75,7 +75,7 @@
   		formData.append('image', file);
 
 		// Make the POST request to upload the avatar
-		const response = await fetch('/api/set-avatar', {
+		const response = await fetch('https://backend.eventool.online/api/set-avatar', {
       		method: 'POST',
      		body: formData,
 			headers: {

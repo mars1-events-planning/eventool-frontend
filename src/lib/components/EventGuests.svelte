@@ -18,7 +18,7 @@
 			formData.append('guestId', guestId);
 
 			// Make the POST request to upload the avatar
-			const response = await fetch('/api/set-guest-avatar', {
+			const response = await fetch('https://backend.eventool.online/api/set-guest-avatar', {
 				method: 'POST',
 				body: formData,
 				headers: {
