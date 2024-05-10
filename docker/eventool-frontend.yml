@@ -14,8 +14,19 @@ services:
       labels:
         - 'traefik.enable=true'
         - 'traefik.http.services.frontend.loadbalancer.server.port=3000'
-        - 'traefik.http.routers.frontend.rule=Host(`eventool.online`)'
+        - 'traefik.http.routers.frontend.rule=Host(`eventool.online`) && !PathPrefix(`/api`)'
         - 'traefik.http.routers.frontend.tls.certresolver=myresolver'
+        
+        # Router for the /api requests
+        - 'traefik.http.routers.api-router.rule=Host(`eventool.online`) && PathPrefix(`/api`)'
+        - 'traefik.http.routers.api-router.entrypoints=websecure'
+        - 'traefik.http.routers.api-router.tls.certresolver=myresolver'
+        - 'traefik.http.routers.api-router.service=api-service'
+
+        # Service for redirecting to backend
+        - 'traefik.http.services.api-service.loadbalancer.server.scheme=https'
+        - 'traefik.http.services.api-service.loadbalancer.server.port=443'
+        - 'traefik.http.services.api-service.loadbalancer.server.url=https://backend.eventool.online'
 
 networks:
   proxy:
