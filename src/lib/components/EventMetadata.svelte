@@ -48,11 +48,11 @@
 						><Edit size={15} /></button
 					>
 				</EditEventModal>
-				<NotesModal>
+				<!-- <NotesModal>
 					<div class="btn btn-neutral btn-outline btn-xs">
 						<Note size={15}/>
 					</div>
-				</NotesModal>
+				</NotesModal> -->
 				<WithConfirmation
 					title="Удалить событие"
 					text="Вы уверены что хотите удалить событие? Восстановить его будет невозможно!"
